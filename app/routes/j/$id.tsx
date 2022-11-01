@@ -28,6 +28,7 @@ import { Body } from "~/components/Primitives/Body";
 import { PageNotFoundTitle } from "~/components/Primitives/PageNotFoundTitle";
 import { SmallSubtitle } from "~/components/Primitives/SmallSubtitle";
 import { Logo } from "~/components/Icons/Logo";
+import ToastPopover from "~/components/UI/ToastPopover";
 
 export const loader: LoaderFunction = async ({ params, request }) => {
   invariant(params.id, "expected params.id");
@@ -118,11 +119,15 @@ export const meta: MetaFunction = ({
 }: {
   data: LoaderData | undefined;
 }) => {
-  if (!data) {
-    return { title: "JSON Hero", robots: "noindex,nofollow" };
+  let title = "JSON Hero";
+
+  if (data) {
+    title += ` - ${data.doc.title}`;
   }
+
   return {
-    title: `JSON Hero - ${data.doc.title}`,
+    title,
+    "og:title": title,
     robots: "noindex,nofollow",
   };
 };
